@@ -1,41 +1,7 @@
 <template>
   <div class="home">
     <div class="center__elem">
-      <!-- <template v-for="question in surveys[0].questions">
-        <RadioQuestion
-          v-if="question.type === 'radio'"
-          :key="question.idQuestion"
-          :question="question"
-        ></RadioQuestion>
-        <CheckboxQuestion
-          v-else-if="question.type === 'checkbox'"
-          :key="question.idQuestion"
-          :question="question"
-        ></CheckboxQuestion>
-      </template>-->
-      <md-card>
-        <md-card-header>
-          <div class="md-title">{{surveys[currentSurvey.survey].label}}</div>
-          <div
-            class="md-subhead"
-          >Total questions: {{surveys[currentSurvey.survey].questions.length}}</div>
-        </md-card-header>
-
-        <RadioQuestion
-          v-if="surveys[currentSurvey.survey].questions[currentSurvey.question].type === 'radio'"
-          :question="surveys[currentSurvey.survey].questions[currentSurvey.question]"
-        ></RadioQuestion>
-        <CheckboxQuestion
-          v-else-if="surveys[currentSurvey.survey].questions[currentSurvey.question].type === 'checkbox'"
-          :question="surveys[currentSurvey.survey].questions[currentSurvey.question]"
-        ></CheckboxQuestion>
-
-        <md-card-actions>
-          <md-button v-if="!isLastQuestion()" v-on:click="nextQuestion">Suivant</md-button>
-          <md-button v-if="!isFirstQuestion()" v-on:click="precQuestion">Précédent</md-button>
-        </md-card-actions>
-      </md-card>
-      <pre>{{currentSurvey}}</pre>
+      
     </div>
   </div>
 </template>
@@ -45,50 +11,7 @@ import checkboxquestion from "../components/checkboxquestion.vue";
 import radioquestion from "../components/radioquestion.vue";
 import moment from "moment";
 export default {
-  name: "home",
-  methods: {
-    nbCurrentSurveyQuestion() {
-      return this.surveys[this.currentSurvey.survey].questions.length;
-    },
-    isFirstQuestion() {
-      // retourne un booleen pour savoir si c'est la première question du questionnaire courant
-      if (this.curQuestionPosition() - 1 === 0) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    isLastQuestion() {
-      const nbQuestion = this.nbCurrentSurveyQuestion();
-      const curquestion = this.curQuestionPosition();
-      // retourne un booleen pour savoir si c'est la dernière question du questionnaire courant
-      console.log("nb question", nbQuestion, " curquestion", curquestion);
-      if (nbQuestion === curquestion) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    curQuestionPosition() {
-      // ne retourne pas l'index mais la position
-      return this.currentSurvey.question + 1;
-    },
-    nextQuestion: function() {
-      //change la question courante pour la suivante
-      if (this.isLastQuestion()) {
-        this.finished = true;
-      } else {
-        console.log(this.isLastQuestion());
-        this.currentSurvey.question++;
-      }
-    },
-    precQuestion: function() {
-      //change la question courante pour la suivante
-      if (!this.isFirstQuestion()) {
-        this.currentSurvey.question--;
-      }
-    }
-  },
+  name: "resultats",
   data() {
     return {
       currentSurvey: {
@@ -176,11 +99,7 @@ export default {
       ]
     };
   },
-  components: {
-    CheckboxQuestion: checkboxquestion,
-    RadioQuestion: radioquestion
-  }
-};
+}
 </script>
 
 <style lang='scss'>
