@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="center__elem">
-      
+      <h1>Vos résultats</h1>
     </div>
   </div>
 </template>
@@ -10,6 +10,7 @@
 import checkboxquestion from "../components/checkboxquestion.vue";
 import radioquestion from "../components/radioquestion.vue";
 import moment from "moment";
+
 export default {
   name: "resultats",
   data() {
@@ -45,7 +46,13 @@ export default {
                   value: "true"
                 }
               ],
-              answer: [], // le / les object qui ont été répondu
+              answer: [
+                {
+                  idChoice: 2,
+                  label: "non",
+                  value: "true"
+                }
+              ], // le / les object qui ont été répondu
               trueAnswer: [
                 {
                   idChoice: 2,
@@ -75,7 +82,19 @@ export default {
                   value: "false"
                 }
               ],
-              answer: [], // le / les object qui ont été répondu
+              answer: [
+                // le / les object qui ont été répondu
+                {
+                  idResponse: 1,
+                  label: "Pâte Carbonara",
+                  value: "false"
+                },
+                {
+                  idChoice: 2,
+                  label: "Pâtes bolo",
+                  value: "false"
+                }
+              ],
               trueAnswer: [
                 {
                   idResponse: 1,
@@ -98,8 +117,8 @@ export default {
         }
       ]
     };
-  },
-}
+  }
+};
 </script>
 
 <style lang='scss'>

@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="center__elem">
-      <!-- <template v-for="question in surveys[0].questions">
+      <!-- <template v-for="question in app__questionnaire.surveys[0].questions">
         <RadioQuestion
           v-if="question.type === 'radio'"
           :key="question.idQuestion"
@@ -14,41 +14,73 @@
         ></CheckboxQuestion>
       </template>-->
       <md-card>
+        <md-progress-bar class="md-accent" md-mode="determinate" :md-value="percentresponce"></md-progress-bar>
         <md-card-header>
-          <div class="md-title">{{surveys[currentSurvey.survey].label}}</div>
+          <div class="md-title">{{app__questionnaire.surveys[currentSurvey()].label}}</div>
           <div
             class="md-subhead"
-          >Total questions: {{surveys[currentSurvey.survey].questions.length}}</div>
+          >Total questions: {{app__questionnaire.surveys[currentSurvey()].questions.length}}</div>
         </md-card-header>
 
         <RadioQuestion
-          v-if="surveys[currentSurvey.survey].questions[currentSurvey.question].type === 'radio'"
-          :question="surveys[currentSurvey.survey].questions[currentSurvey.question]"
+          v-if="app__questionnaire.surveys[currentSurvey()].questions[curQuestionPosition() -1].type === 'radio'"
+          :question="app__questionnaire.surveys[currentSurvey()].questions[curQuestionPosition() -1]"
         ></RadioQuestion>
         <CheckboxQuestion
-          v-else-if="surveys[currentSurvey.survey].questions[currentSurvey.question].type === 'checkbox'"
-          :question="surveys[currentSurvey.survey].questions[currentSurvey.question]"
+          v-else-if="app__questionnaire.surveys[currentSurvey()].questions[curQuestionPosition() -1].type === 'checkbox'"
+          :question="app__questionnaire.surveys[currentSurvey()].questions[curQuestionPosition() -1]"
         ></CheckboxQuestion>
 
         <md-card-actions>
           <md-button v-if="!isLastQuestion()" v-on:click="nextQuestion">Suivant</md-button>
           <md-button v-if="!isFirstQuestion()" v-on:click="precQuestion">Précédent</md-button>
+          <md-button v-if="isLastQuestion()" v-on:click="endSurvey">Terminer</md-button>
         </md-card-actions>
       </md-card>
-      <pre>{{currentSurvey}}</pre>
+      <pre>{{app__questionnaire.userSurvey}}</pre>
     </div>
   </div>
 </template>
 
 <script>
+import router from "../router";
 import checkboxquestion from "../components/checkboxquestion.vue";
 import radioquestion from "../components/radioquestion.vue";
 import moment from "moment";
+import pouchdb from "pouchdb";
+
+var db = new pouchdb("QuestionnaireApp");
+
+db.changes().on("change", function() {
+  console.log("Ch-Ch-Changes");
+});
 export default {
   name: "home",
+  mounted(){
+
+  },
+  computed: {
+    percentresponce() {
+      return (this.curQuestionPosition() * 100) / this.nbuserSurveyQuestion();
+    }
+  },
+  created() {
+    //db.put(this.app__questionnaire);
+  },
   methods: {
-    nbCurrentSurveyQuestion() {
-      return this.surveys[this.currentSurvey.survey].questions.length;
+    endSurvey() {
+      router.push("resultats");
+
+      const userQuestionnaire = {};
+
+      //db.put(this.app__questionnaire);
+    },
+    currentSurvey() {
+      // retourne L'INDEX
+      return this.survey;
+    },
+    nbuserSurveyQuestion() {
+      return this.app__questionnaire.surveys[this.survey].questions.length;
     },
     isFirstQuestion() {
       // retourne un booleen pour savoir si c'est la première question du questionnaire courant
@@ -59,7 +91,7 @@ export default {
       }
     },
     isLastQuestion() {
-      const nbQuestion = this.nbCurrentSurveyQuestion();
+      const nbQuestion = this.nbuserSurveyQuestion();
       const curquestion = this.curQuestionPosition();
       // retourne un booleen pour savoir si c'est la dernière question du questionnaire courant
       console.log("nb question", nbQuestion, " curquestion", curquestion);
@@ -71,7 +103,7 @@ export default {
     },
     curQuestionPosition() {
       // ne retourne pas l'index mais la position
-      return this.currentSurvey.question + 1;
+      return this.question + 1;
     },
     nextQuestion: function() {
       //change la question courante pour la suivante
@@ -79,101 +111,201 @@ export default {
         this.finished = true;
       } else {
         console.log(this.isLastQuestion());
-        this.currentSurvey.question++;
+        this.question++;
       }
     },
     precQuestion: function() {
       //change la question courante pour la suivante
       if (!this.isFirstQuestion()) {
-        this.currentSurvey.question--;
+        this.question--;
       }
     }
   },
   data() {
     return {
-      currentSurvey: {
-        //Permet de gérer le survey courant mais également la fin / début et question courrante et peut être des stats avec le temps passé
-        startSurvey: moment().format("DD-MM-YYYY HH:mm"),
-        survey: 0,
-        question: 0,
-        finished: false
+      survey: 0,
+      question: 0,
+      user: {
+        _id: "MathieuJanioSurveyBadass",
+        name: "Mathieu",
+        surname: "Janio",
+        compagny: "SurveyBadass",
+        surveys: [
+          {
+            idSurvey: 1, // un questionnaire
+            label: "Le survey badass",
+            questions: [
+              //Liste des question pour ce questionnaire
+              {
+                idQuestion: 1,
+                type: "radio",
+                question: "Est-tu beau?",
+                choices: [
+                  //les choix pour cette question
+                  {
+                    idChoice: 1,
+                    label: "oui",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 2,
+                    label: "non",
+                    value: "true"
+                  }
+                ],
+                answer: [], // le / les object qui ont été répondu
+                trueAnswer: [
+                  {
+                    idChoice: 2,
+                    label: "non",
+                    value: "true"
+                  }
+                ]
+              },
+              {
+                idQuestion: 2,
+                type: "checkbox",
+                question: "Quesque tu aime?",
+                choices: [
+                  {
+                    idResponse: 1,
+                    label: "Pâte Carbonara",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 2,
+                    label: "Pâtes bolo",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 3,
+                    label: "Pâtes bolo",
+                    value: "false"
+                  }
+                ],
+                answer: [], // le / les object qui ont été répondu
+                trueAnswer: [
+                  {
+                    idResponse: 1,
+                    label: "Pâte Carbonara",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 2,
+                    label: "Pâtes bolo",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 3,
+                    label: "Pâtes bolo",
+                    value: "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
-      surveys: [
-        // liste des peut-être différents questionnaires
-        {
-          idSurvey: 1, // un questionnaire
-          label: "Le survey badass",
-          questions: [
-            //Liste des question pour ce questionnaire
+
+      app__questionnaire: {
+        _id: "BadassSurvey__app",
+        userSurvey: {
+          //Permet de gérer le survey courant mais également la fin / début et question courrante et peut être des stats avec le temps passé
+          idUser: 1,
+          name: "Mathieu",
+          surname: "Janio",
+          compagny: "",
+          surveysIn: [
             {
-              idQuestion: 1,
-              type: "radio",
-              question: "Est-tu beau?",
-              choices: [
-                //les choix pour cette question
+              finished: false,
+              startSurvey: moment().format("DD-MM-YYYY HH:mm"),
+              idSurvey: 1,
+              answer: [
                 {
-                  idChoice: 1,
-                  label: "oui",
-                  value: "false"
-                },
-                {
-                  idChoice: 2,
-                  label: "non",
-                  value: "true"
-                }
-              ],
-              answer: [], // le / les object qui ont été répondu
-              trueAnswer: [
-                {
-                  idChoice: 2,
-                  label: "non",
-                  value: "true"
-                }
-              ]
-            },
-            {
-              idQuestion: 2,
-              type: "checkbox",
-              question: "Quesque tu aime?",
-              choices: [
-                {
-                  idResponse: 1,
-                  label: "Pâte Carbonara",
-                  value: "false"
-                },
-                {
-                  idChoice: 2,
-                  label: "Pâtes bolo",
-                  value: "false"
-                },
-                {
-                  idChoice: 3,
-                  label: "Pâtes bolo",
-                  value: "false"
-                }
-              ],
-              answer: [], // le / les object qui ont été répondu
-              trueAnswer: [
-                {
-                  idResponse: 1,
-                  label: "Pâte Carbonara",
-                  value: "false"
-                },
-                {
-                  idChoice: 2,
-                  label: "Pâtes bolo",
-                  value: "false"
-                },
-                {
-                  idChoice: 3,
-                  label: "Pâtes bolo",
-                  value: "false"
+                  idQuestion: 1,
+                  value: []
                 }
               ]
             }
           ]
-        }
-      ]
+        },
+        surveys: [
+          // liste des peut-être différents questionnaires
+          {
+            idSurvey: 1, // un questionnaire
+            label: "Le survey badass",
+            questions: [
+              //Liste des question pour ce questionnaire
+              {
+                idQuestion: 1,
+                type: "radio",
+                question: "Est-tu beau?",
+                choices: [
+                  //les choix pour cette question
+                  {
+                    idChoice: 1,
+                    label: "oui",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 2,
+                    label: "non",
+                    value: "true"
+                  }
+                ],
+                answer: [], // le / les object qui ont été répondu
+                trueAnswer: [
+                  {
+                    idChoice: 2,
+                    label: "non",
+                    value: "true"
+                  }
+                ]
+              },
+              {
+                idQuestion: 2,
+                type: "checkbox",
+                question: "Quesque tu aime?",
+                choices: [
+                  {
+                    idResponse: 1,
+                    label: "Pâte Carbonara",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 2,
+                    label: "Pâtes bolo",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 3,
+                    label: "Pâtes bolo",
+                    value: "false"
+                  }
+                ],
+                answer: [], // le / les object qui ont été répondu
+                trueAnswer: [
+                  {
+                    idResponse: 1,
+                    label: "Pâte Carbonara",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 2,
+                    label: "Pâtes bolo",
+                    value: "false"
+                  },
+                  {
+                    idChoice: 3,
+                    label: "Pâtes bolo",
+                    value: "false"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
     };
   },
   components: {
