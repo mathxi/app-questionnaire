@@ -2,121 +2,67 @@
   <div class="home">
     <div class="center__elem">
       <h1>Vos résultats</h1>
+      <div class="md-subhead">Total questions: {{user.surveys[idSurvey].questions.length}}</div>
+      <md-card
+        v-for="question in user.surveys[idSurvey].questions"
+        v-bind:key="question.idQuestion"
+      >
+        <RadioQuestion v-if="question.type === 'radio'" :question="question"></RadioQuestion>
+        <CheckboxQuestion v-else-if="question.type === 'checkbox'" :question="question"></CheckboxQuestion>
+      </md-card>
+      <pre>{{user.surveys[idSurvey].questions}}</pre>
     </div>
   </div>
 </template>
+
 
 <script>
 import checkboxquestion from "../components/checkboxquestion.vue";
 import radioquestion from "../components/radioquestion.vue";
 import moment from "moment";
+import pouchdb from "pouchdb";
+import router from "../router";
+
+var db = new pouchdb("QuestionnaireApp");
+
+db.changes().on("change", function() {
+  console.log("Ch-Ch-Changes");
+});
 
 export default {
   name: "resultats",
+  mounted() {
+    const idUser = this.$route.query.idUser;
+    db.get(idUser)
+      .then(doc => {
+        console.log("doc= ", doc);
+        this.user = doc;
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+  },
   data() {
     return {
-      currentSurvey: {
-        //Permet de gérer le survey courant mais également la fin / début et question courrante et peut être des stats avec le temps passé
-        startSurvey: moment().format("DD-MM-YYYY HH:mm"),
-        survey: 0,
-        question: 0,
-        finished: false
-      },
-      surveys: [
-        // liste des peut-être différents questionnaires
-        {
-          idSurvey: 1, // un questionnaire
-          label: "Le survey badass",
-          questions: [
-            //Liste des question pour ce questionnaire
-            {
-              idQuestion: 1,
-              type: "radio",
-              question: "Est-tu beau?",
-              choices: [
-                //les choix pour cette question
-                {
-                  idChoice: 1,
-                  label: "oui",
-                  value: "false"
-                },
-                {
-                  idChoice: 2,
-                  label: "non",
-                  value: "true"
-                }
-              ],
-              answer: [
-                {
-                  idChoice: 2,
-                  label: "non",
-                  value: "true"
-                }
-              ], // le / les object qui ont été répondu
-              trueAnswer: [
-                {
-                  idChoice: 2,
-                  label: "non",
-                  value: "true"
-                }
-              ]
-            },
-            {
-              idQuestion: 2,
-              type: "checkbox",
-              question: "Quesque tu aime?",
-              choices: [
-                {
-                  idResponse: 1,
-                  label: "Pâte Carbonara",
-                  value: "false"
-                },
-                {
-                  idChoice: 2,
-                  label: "Pâtes bolo",
-                  value: "false"
-                },
-                {
-                  idChoice: 3,
-                  label: "Pâtes bolo",
-                  value: "false"
-                }
-              ],
-              answer: [
-                // le / les object qui ont été répondu
-                {
-                  idResponse: 1,
-                  label: "Pâte Carbonara",
-                  value: "false"
-                },
-                {
-                  idChoice: 2,
-                  label: "Pâtes bolo",
-                  value: "false"
-                }
-              ],
-              trueAnswer: [
-                {
-                  idResponse: 1,
-                  label: "Pâte Carbonara",
-                  value: "false"
-                },
-                {
-                  idChoice: 2,
-                  label: "Pâtes bolo",
-                  value: "false"
-                },
-                {
-                  idChoice: 3,
-                  label: "Pâtes bolo",
-                  value: "false"
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      idSurvey: this.$route.query.idSurvey,
+      user: {
+        _id: this.$route.query.idUser,
+        name: "Mathieu",
+        surname: "Janio",
+        compagny: "SurveyBadass",
+        surveys: [
+          {
+            idSurvey: "", // un questionnaire
+            label: "",
+            questions: []
+          }
+        ]
+      }
     };
+  },
+  components: {
+    CheckboxQuestion: checkboxquestion,
+    RadioQuestion: radioquestion
   }
 };
 </script>

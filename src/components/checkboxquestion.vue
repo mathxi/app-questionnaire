@@ -13,6 +13,12 @@
 <script>
 export default {
   name: "CheckboxQuestion",
-  props: ["question"]
+  props: ["question"],
+  created() {
+    if (this.question.answer.length != 0) {
+      console.log("J AI DEJA EU DES REPONSES");
+      Object.assign(this.question.choices, this.question.answer);
+    }
+  }
 };
 </script>

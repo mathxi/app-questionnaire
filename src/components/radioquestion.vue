@@ -19,6 +19,12 @@ export default {
     this.question.answer  = this.question.choices.find( choice => {
       return choice.value == "true"
     });
+
+    if(this.question.answer.length != 0){
+      console.log("J AI DEJA EU DES REPONSES");
+      Object.assign(this.question.choices, this.question.answer)
+      
+    }
   },
   methods: {
     toogle(e) {

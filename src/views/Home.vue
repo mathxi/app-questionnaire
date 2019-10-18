@@ -16,19 +16,17 @@
       <md-card>
         <md-progress-bar class="md-accent" md-mode="determinate" :md-value="percentresponce"></md-progress-bar>
         <md-card-header>
-          <div class="md-title">{{app__questionnaire.surveys[currentSurvey()].label}}</div>
-          <div
-            class="md-subhead"
-          >Total questions: {{app__questionnaire.surveys[currentSurvey()].questions.length}}</div>
+          <div class="md-title">{{questionnaire.label}}</div>
+          <div class="md-subhead">Total questions: {{questionnaire.questions.length}}</div>
         </md-card-header>
 
         <RadioQuestion
-          v-if="app__questionnaire.surveys[currentSurvey()].questions[curQuestionPosition() -1].type === 'radio'"
-          :question="app__questionnaire.surveys[currentSurvey()].questions[curQuestionPosition() -1]"
+          v-if="questionnaire.questions[curQuestionPosition() -1].type === 'radio'"
+          :question="questionnaire.questions[curQuestionPosition() -1]"
         ></RadioQuestion>
         <CheckboxQuestion
-          v-else-if="app__questionnaire.surveys[currentSurvey()].questions[curQuestionPosition() -1].type === 'checkbox'"
-          :question="app__questionnaire.surveys[currentSurvey()].questions[curQuestionPosition() -1]"
+          v-else-if="questionnaire.questions[curQuestionPosition() -1].type === 'checkbox'"
+          :question="questionnaire.questions[curQuestionPosition() -1]"
         ></CheckboxQuestion>
 
         <md-card-actions>
@@ -37,7 +35,7 @@
           <md-button v-if="isLastQuestion()" v-on:click="endSurvey">Terminer</md-button>
         </md-card-actions>
       </md-card>
-      <pre>{{app__questionnaire.userSurvey}}</pre>
+      <pre>{{user}}</pre>
     </div>
   </div>
 </template>
@@ -56,9 +54,7 @@ db.changes().on("change", function() {
 });
 export default {
   name: "home",
-  mounted(){
-
-  },
+  mounted() {},
   computed: {
     percentresponce() {
       return (this.curQuestionPosition() * 100) / this.nbuserSurveyQuestion();
@@ -68,19 +64,85 @@ export default {
     //db.put(this.app__questionnaire);
   },
   methods: {
+    // async getUserData() {
+    //   var docUser = null;
+    //   db.get(this.questionnaire._id)
+    //     .then(doc => {
+    //       docUser = doc;
+    //       return docUser;
+    //     })
+    //     .catch(function(err) {
+    //       console.log("get doc", err);
+    //       return docUser;
+    //     });
+    // },
+    // updateUserData(doc) {
+    //   doc.surveys.push(this.user.surveys);
+    //   const options = {
+    //     force: true
+    //   };
+    //   return { doc: doc, options: options };
+    // },
+    // insertDocDB(doc, options) {
+    //   db.put(doc, options)
+    //     .then(function(response) {
+    //       console.log("Insert survey success response", response);
+    //     })
+    //     .catch(function(err) {
+    //       console.log("Insert survey err ", err);
+    //     });
+    // },
     endSurvey() {
-      router.push("resultats");
+      const options = {
+        force: true
+      };
+      // this.user.surveys.push(this.app__questionnaire.surveys[this.survey]);
+      //var docUser = this.getUserData();
+      //const preparedInsert = this.updateUserData(docUser);
+      //this.insertDocDB(preparedInsert.doc, preparedInsert.options);
 
-      const userQuestionnaire = {};
+      db.get(this.user._id)
+        .then(doc => {
+          console.log(doc, this.user);
 
-      //db.put(this.app__questionnaire);
+          let tempFind = false;
+          doc.surveys.foreach(docSurvey => {
+            if (this.questionnaire._id === docSurvey._id) {
+              tempFind = true;
+            }
+          });
+          if (tempFind) {
+            doc.surveys.push(this.questionnaire);
+          } else {
+            console.log("Questionnaire déjà remplis");
+          }
+
+          db.put(doc, options)
+            .then(function(response) {
+              console.log("Insert survey success response", response);
+            })
+            .catch(function(err) {
+              console.log("Insert survey err ", err);
+            });
+        })
+        .catch(function(err) {
+          console.log("get doc", err);
+        });
+
+      router.push({
+        path: "resultats",
+        query: {
+          idUser: this.user._id,
+          idSurvey: this.questionnaire._id
+        }
+      });
     },
     currentSurvey() {
       // retourne L'INDEX
-      return this.survey;
+      return this.questionnaire._id;
     },
     nbuserSurveyQuestion() {
-      return this.app__questionnaire.surveys[this.survey].questions.length;
+      return this.questionnaire.questions.length;
     },
     isFirstQuestion() {
       // retourne un booleen pour savoir si c'est la première question du questionnaire courant
@@ -123,184 +185,82 @@ export default {
   },
   data() {
     return {
-      survey: 0,
       question: 0,
       user: {
         _id: "MathieuJanioSurveyBadass",
         name: "Mathieu",
         surname: "Janio",
         compagny: "SurveyBadass",
-        surveys: [
+        surveys: []
+      },
+      questionnaire: {
+        _id: "BadassSurvey__app", //un questionnaire
+        label: "Le survey badass",
+        questions: [
+          //Liste des question pour ce questionnaire
           {
-            idSurvey: 1, // un questionnaire
-            label: "Le survey badass",
-            questions: [
-              //Liste des question pour ce questionnaire
+            idQuestion: 1,
+            type: "radio",
+            question: "Est-tu beau?",
+            choices: [
+              //les choix pour cette question
               {
-                idQuestion: 1,
-                type: "radio",
-                question: "Est-tu beau?",
-                choices: [
-                  //les choix pour cette question
-                  {
-                    idChoice: 1,
-                    label: "oui",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 2,
-                    label: "non",
-                    value: "true"
-                  }
-                ],
-                answer: [], // le / les object qui ont été répondu
-                trueAnswer: [
-                  {
-                    idChoice: 2,
-                    label: "non",
-                    value: "true"
-                  }
-                ]
+                idChoice: 1,
+                label: "oui",
+                value: "false"
               },
               {
-                idQuestion: 2,
-                type: "checkbox",
-                question: "Quesque tu aime?",
-                choices: [
-                  {
-                    idResponse: 1,
-                    label: "Pâte Carbonara",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 2,
-                    label: "Pâtes bolo",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 3,
-                    label: "Pâtes bolo",
-                    value: "false"
-                  }
-                ],
-                answer: [], // le / les object qui ont été répondu
-                trueAnswer: [
-                  {
-                    idResponse: 1,
-                    label: "Pâte Carbonara",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 2,
-                    label: "Pâtes bolo",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 3,
-                    label: "Pâtes bolo",
-                    value: "false"
-                  }
-                ]
+                idChoice: 2,
+                label: "non",
+                value: "true"
+              }
+            ],
+            answer: [], // le / les object qui ont été répondu
+            trueAnswer: [
+              {
+                idChoice: 2,
+                label: "non",
+                value: "true"
               }
             ]
-          }
-        ]
-      },
-
-      app__questionnaire: {
-        _id: "BadassSurvey__app",
-        userSurvey: {
-          //Permet de gérer le survey courant mais également la fin / début et question courrante et peut être des stats avec le temps passé
-          idUser: 1,
-          name: "Mathieu",
-          surname: "Janio",
-          compagny: "",
-          surveysIn: [
-            {
-              finished: false,
-              startSurvey: moment().format("DD-MM-YYYY HH:mm"),
-              idSurvey: 1,
-              answer: [
-                {
-                  idQuestion: 1,
-                  value: []
-                }
-              ]
-            }
-          ]
-        },
-        surveys: [
-          // liste des peut-être différents questionnaires
+          },
           {
-            idSurvey: 1, // un questionnaire
-            label: "Le survey badass",
-            questions: [
-              //Liste des question pour ce questionnaire
+            idQuestion: 2,
+            type: "checkbox",
+            question: "Quesque tu aime?",
+            choices: [
               {
-                idQuestion: 1,
-                type: "radio",
-                question: "Est-tu beau?",
-                choices: [
-                  //les choix pour cette question
-                  {
-                    idChoice: 1,
-                    label: "oui",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 2,
-                    label: "non",
-                    value: "true"
-                  }
-                ],
-                answer: [], // le / les object qui ont été répondu
-                trueAnswer: [
-                  {
-                    idChoice: 2,
-                    label: "non",
-                    value: "true"
-                  }
-                ]
+                idResponse: 1,
+                label: "Pâte Carbonara",
+                value: "false"
               },
               {
-                idQuestion: 2,
-                type: "checkbox",
-                question: "Quesque tu aime?",
-                choices: [
-                  {
-                    idResponse: 1,
-                    label: "Pâte Carbonara",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 2,
-                    label: "Pâtes bolo",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 3,
-                    label: "Pâtes bolo",
-                    value: "false"
-                  }
-                ],
-                answer: [], // le / les object qui ont été répondu
-                trueAnswer: [
-                  {
-                    idResponse: 1,
-                    label: "Pâte Carbonara",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 2,
-                    label: "Pâtes bolo",
-                    value: "false"
-                  },
-                  {
-                    idChoice: 3,
-                    label: "Pâtes bolo",
-                    value: "false"
-                  }
-                ]
+                idChoice: 2,
+                label: "Pâtes au beur",
+                value: "false"
+              },
+              {
+                idChoice: 3,
+                label: "Pâtes bolo",
+                value: "false"
+              }
+            ],
+            answer: [], // le / les object qui ont été répondu
+            trueAnswer: [
+              {
+                idResponse: 1,
+                label: "Pâte Carbonara",
+                value: "false"
+              },
+              {
+                idChoice: 2,
+                label: "Pâtes bolo",
+                value: "false"
+              },
+              {
+                idChoice: 3,
+                label: "Pâtes bolo",
+                value: "false"
               }
             ]
           }
