@@ -2,15 +2,27 @@
   <div class="home">
     <div class="center__elem">
       <h1>Vos résultats</h1>
-      <div class="md-subhead">Total questions: {{user.surveys[idSurvey].questions.length}}</div>
+      <div
+        class="md-subhead"
+      >Total questions: {{user.surveys[getIndexSurveyFromId].questions.length}}</div>
       <md-card
-        v-for="question in user.surveys[idSurvey].questions"
-        v-bind:key="question.idQuestion"
+        v-for="curQuestion in user.surveys[getIndexSurveyFromId].questions"
+        v-bind:key="curQuestion.idQuestion"
       >
-        <RadioQuestion v-if="question.type === 'radio'" :question="question"></RadioQuestion>
-        <CheckboxQuestion v-else-if="question.type === 'checkbox'" :question="question"></CheckboxQuestion>
+        <md-card-actions>
+          <md-icon v-if="isQuestionRight(curQuestion)">check_circle</md-icon>
+        </md-card-actions>
+        <RadioQuestion
+          v-if="curQuestion.type === 'radio'"
+          v-bind:disable="true"
+          :question="curQuestion"
+        ></RadioQuestion>
+        <CheckboxQuestion
+          v-else-if="curQuestion.type === 'checkbox'"
+          v-bind:disable="true"
+          :question="curQuestion"
+        ></CheckboxQuestion>
       </md-card>
-      <pre>{{user.surveys[idSurvey].questions}}</pre>
     </div>
   </div>
 </template>
@@ -25,9 +37,9 @@ import router from "../router";
 
 var db = new pouchdb("QuestionnaireApp");
 
-db.changes().on("change", function() {
-  console.log("Ch-Ch-Changes");
-});
+// db.changes().on("change", function() {
+//   console.log("Ch-Ch-Changes");
+// });
 
 export default {
   name: "resultats",
@@ -35,13 +47,14 @@ export default {
     const idUser = this.$route.query.idUser;
     db.get(idUser)
       .then(doc => {
-        console.log("doc= ", doc);
         this.user = doc;
+        console.log("doc= ", this.user);
       })
       .catch(function(err) {
         console.log(err);
       });
   },
+
   data() {
     return {
       idSurvey: this.$route.query.idSurvey,
@@ -63,11 +76,82 @@ export default {
   components: {
     CheckboxQuestion: checkboxquestion,
     RadioQuestion: radioquestion
+  },
+  methods: {
+    isQuestionRight(curQuestion) {
+      //les methodes find / map ect.. ne marchais pas
+
+      console.log("question", curQuestion);
+      let nbGoodQuestion = 0;
+      for (let index = 0; index != curQuestion.trueAnswer.length; index++) {
+        for (let index2 = 0; index2 != curQuestion.answer.length; index2++) {
+          console.log("index", index);
+          console.log("index2", index2);
+
+          console.log("curQuestion.answer[index2]", curQuestion.answer[index2]);
+          console.log(
+            "curQuestion.trueAnswer[index]",
+            curQuestion.trueAnswer[index]
+          );
+
+          console.log(
+            "condition 1",
+            curQuestion.answer[index2].idChoice ===
+              curQuestion.trueAnswer[index].idChoice
+          );
+          if (
+            curQuestion.answer[index2].idChoice ===
+            curQuestion.trueAnswer[index].idChoice
+          ) {
+            nbGoodQuestion++;
+          }
+        }
+      }
+      console.log(
+        "Bien répondu ?",
+        nbGoodQuestion === curQuestion.trueAnswer.length
+      );
+      if (nbGoodQuestion === curQuestion.trueAnswer.length) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    getIndexQuestionFromId(idQuestion) {
+      let indexSurvey = this.getIndexSurveyFromId;
+      let questionIndex;
+      for (let index = 0; index < this.user.surveys.length; index++) {
+        if (this.user.surveys[indexSurvey].questions === idQuestion) {
+          questionIndex = index;
+        }
+      }
+      // console.log("questionIndex", questionIndex);
+      return questionIndex;
+    }
+  },
+  computed: {
+    getIndexSurveyFromId() {
+      let surveyIndex;
+      for (let index = 0; index < this.user.surveys.length; index++) {
+        // console.log("Found ?",this.user.surveys[index].id === this.idSurvey);
+
+        if (this.user.surveys[index].id === this.idSurvey) {
+          surveyIndex = index;
+        }
+      }
+      // console.log("this.idSurvey", this.idSurvey);
+
+      // console.log("surveyIndex", surveyIndex);
+      return surveyIndex;
+    }
   }
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
+.md-card i {
+  color: green !important;
+}
 .md-card {
   width: 700px;
   padding: 20px;

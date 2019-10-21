@@ -6,6 +6,7 @@
       :key="choice.idResponse"
       v-model="choice.value"
       value="true"
+      :disabled="disable"
       v-on:change="toogle(choice)"
     >{{choice.label}}</md-radio>
     <!-- <pre>{{question}}</pre> -->
@@ -14,8 +15,9 @@
 <script>
 export default {
   name: "RadioQuestion",
-  props: ["question"],
+  props: ["question","disable"],
   created() {
+    console.log("this.question", this.question)
     this.question.answer  = this.question.choices.find( choice => {
       return choice.value == "true"
     });
@@ -28,13 +30,14 @@ export default {
   },
   methods: {
     toogle(e) {
-      e.value = "true";
+      
       this.question.choices.forEach(choice => {
         if (choice.idChoice != e.idChoice) {
           choice.value = "false";
         }
       });
-      this.question.answer = e;
+      e.value = "true";
+      this.question.answer = [e];
     }
   }
 };

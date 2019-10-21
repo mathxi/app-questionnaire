@@ -29,15 +29,13 @@ export default {
         console.log(err);
       });
 
-    /*
-          db.put(this.user,{force:true})
+    db.put(this.user, { force: true })
       .then(function(response) {
-        console.log("put response",response)
+        console.log("put response", response);
       })
       .catch(function(err) {
         console.log(err);
       });
-  */
   },
   data() {
     return {

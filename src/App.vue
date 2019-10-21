@@ -1,7 +1,7 @@
 <template>
   <div>
     <md-tabs md-sync-route class="md-primary" md-alignment="centered">
-      <md-tab md-icon="home" md-label="Questionnaires" to="/" exact></md-tab>
+      <md-tab md-icon="home" md-label="Accueil" to="/" exact></md-tab>
       <md-tab md-icon="accessible_forward" md-label="Admin" to="/about"></md-tab>
     </md-tabs>
     <!-- <router-link to="/">Home</router-link> |
