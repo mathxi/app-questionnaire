@@ -1,12 +1,8 @@
 <template>
   <div>
-    <md-tabs md-sync-route class="md-primary" md-alignment="centered">
-      <md-tab md-icon="home" md-label="Accueil" to="/" exact></md-tab>
-      <md-tab md-icon="accessible_forward" md-label="Admin" to="/about"></md-tab>
-    </md-tabs>
-    <!-- <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>-->
-    <router-view />
+    <transition name="router-anim">
+      <router-view />
+    </transition>
   </div>
 </template>
 
@@ -16,7 +12,7 @@
 @include md-register-theme(
   "default",
   (
-    primary: #00818a,
+    primary: #26959c,
     // The primary color of your brand
       accent: #8186d5 // The secondary color of your brand
   )
@@ -24,4 +20,29 @@
 
 @import "~vue-material/dist/theme/all"; // Apply the themeyle>
 
+.router-anim-enter-active {
+  animation: coming 0.5s;
+  animation-delay: 0.5s;
+  opacity: 0;
+}
+.router-anim-leave-active {
+  animation: going 0.5s;
+}
+
+@keyframes going {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes coming {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 </style>
