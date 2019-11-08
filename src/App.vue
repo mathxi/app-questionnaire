@@ -3,8 +3,15 @@
     <transition name="router-anim">
       <router-view />
     </transition>
+    <md-snackbar md-position="center" :md-duration="M_mdDuration" :md-active.sync="M_showSnackbar">
+      <span>{{M_message}}</span>
+      <md-button class="md-primary" @click="M_showSnackbar = false">Cacher</md-button>
+    </md-snackbar>
   </div>
 </template>
+
+<script lang="ts">
+</script>
 
 <style lang="scss">
 @import "~vue-material/dist/theme/engine"; // Import the theme engine

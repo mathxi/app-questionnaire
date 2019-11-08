@@ -24,31 +24,26 @@
         <md-button class="md-raised md-primary" @click="verifierInscription()">Commencer le test</md-button>
       </md-card-actions>
     </md-card>
-    <md-snackbar md-position="center" :md-duration="mdDuration" :md-active.sync="showSnackbar">
-      <span>Champs non correct</span>
-      <md-button class="md-primary" @click="showSnackbar = false">Cacher</md-button>
-    </md-snackbar>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "login",
   methods: {
     verifierInscription() {
-      if (this.isConnected()) { // mixin in app.vue
+      if (this.M_isConnected()) {
         this.$router.push("questionnaire");
       } else {
-        this.showSnackbar = true;
+        this.M_snakbarMessage = "Champs non remplis";
+        this.M_showSnackbar = true;
       }
     }
   },
   components: {},
   data() {
-    return {
-      showSnackbar: false,
-      mdDuration: 1500
-    };
+    return {};
   }
 };
 </script>

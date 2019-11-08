@@ -1,7 +1,7 @@
 <template>
   <div class="questionnaire">
     <div class="center__elem">
-      <h1>Questionnaire de {{$user.prenom}}</h1>
+      <h1>Questionnaire de</h1>
       <md-card>
         <md-progress-bar class="md-accent" md-mode="determinate" :md-value="percentresponce"></md-progress-bar>
         <md-card-header>
@@ -27,7 +27,17 @@
 import checkboxquestion from "../components/checkboxquestion.vue";
 export default {
   name: "questionnaire",
-  components: {}
+  created() {
+    if (this.isConnected()) {
+      this.$router.push("login");
+    } else {
+      this.M_snakbarMessage = "Bienvenu " + this.$user.nom + " " +this.$user.prenom  ;
+      this.M_showSnackbar = true;
+    }
+  },
+  components: {
+    checkboxquestion
+  }
 };
 </script>
 
