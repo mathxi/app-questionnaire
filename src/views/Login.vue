@@ -21,7 +21,7 @@
       </md-card-content>
 
       <md-card-actions>
-        <md-button class="md-raised md-primary" @click="verifierInscription()">Commencer le test</md-button>
+        <md-button class="md-raised md-primary" @click="verifierInscription('questionnaire','Champs non remplis')">Commencer le test</md-button>
       </md-card-actions>
     </md-card>
   </div>
@@ -31,14 +31,15 @@
 
 export default {
   name: "login",
+  created(){
+    console.log("Created snackbar",this.$store.state.globalMessage)
+  },
   methods: {
-    verifierInscription() {
-      if (this.M_isConnected()) {
-        this.$router.push("questionnaire");
-      } else {
-        this.M_snakbarMessage = "Champs non remplis";
-        this.M_showSnackbar = true;
-      }
+
+  },
+  computed:{
+    getSnacBar(){
+      return this.$store.state.globalMessage;
     }
   },
   components: {},

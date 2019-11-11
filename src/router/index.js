@@ -10,7 +10,7 @@ const routes = [
   {
     path: '/',
     name: 'login',
-    component: App
+    component: Login
   },
   {
     path: '/questionnaire',

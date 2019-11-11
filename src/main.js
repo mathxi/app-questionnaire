@@ -2,11 +2,10 @@ import Vue from 'vue'
 import Default from './App.vue'
 import router from './router'
 import './registerServiceWorker'
-
+import store from './store'
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
-import {globalValue} from './mixins/globalValue'
-
+//import { globalValue } from './mixins/globalValue'
 Vue.use(VueMaterial)
 
 Vue.config.productionTip = false
@@ -51,10 +50,41 @@ Vue.prototype.$questionnaire = {
     },
   ]
 }
-
+Vue.mixin({
+  created() {
+  },
+  methods: {
+    M_isConnected() {
+      if (
+        this.$user.prenom != "" &&
+        this.$user.nom != "" &&
+        this.$user.entreprise != ""
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    verifierInscription(laRoute,msg) {
+      if (this.M_isConnected()) {
+        this.$router.push(laRoute);
+      } else {
+        this.M_snakbarMessage = msg
+        this.M_showSnackbar = true
+      }
+    }
+  },
+  data() {
+    return {
+      M_showSnackbar: false,
+      M_mdDuration: 1500,
+      M_message: ""
+    };
+  }
+});
 
 new Vue({
-  mixins:[globalValue],
+  store,
   router,
   render: h => h(Default)
 }).$mount('#app')

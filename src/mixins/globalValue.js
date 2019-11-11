@@ -1,6 +1,5 @@
 export const globalValue = {
     created() {
-        console.log("created !")
     },
     methods: {
         M_isConnected() {
