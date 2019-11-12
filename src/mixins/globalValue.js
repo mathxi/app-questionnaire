@@ -17,7 +17,7 @@ export const globalValue = {
     data() {
         return {
             M_showSnackbar: false,
-            M_mdDuration: 1500,
+            M_mdDuration: 2000,
             M_message: ""
         };
     }

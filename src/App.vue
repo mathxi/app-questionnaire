@@ -3,9 +3,9 @@
     <transition name="router-anim">
       <router-view />
     </transition>
-    <md-snackbar md-position="center" :md-duration="M_mdDuration" :md-active.sync="M_showSnackbar">
-      <span>{{M_message}}</span>
-      <md-button class="md-primary" @click="M_showSnackbar = false">Cacher</md-button>
+    <md-snackbar md-position="center" :style="snackBar.M_style" :md-duration="snackBar.M_mdDuration" :md-active.sync="snackBar.M_showSnackbar">
+      <span>{{snackBar.M_message}}</span>
+      <!-- <md-button class="md-primary" @click="snackBar.M_showSnackbar = false">Cacher</md-button> -->
     </md-snackbar>
   </div>
 </template>
@@ -13,8 +13,16 @@
 <script lang="ts">
 export default {
   name: "appBase",
-  mounted() {
-  }
+  created() {
+  },
+  computed: {
+    snackBar: {
+      get() {
+        return this.$store.getters.getSnackBar
+      }
+    }
+  },
+  mounted() {}
 };
 </script>
 

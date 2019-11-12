@@ -1,7 +1,7 @@
 <template>
   <div class="questionnaire">
     <div class="center__elem">
-      <h1>Questionnaire de</h1>
+      <h1>Questionnaire de {{user.nom}} {{user.prenom}}</h1>
       <md-card>
         <md-progress-bar class="md-accent" md-mode="determinate" :md-value="percentresponce"></md-progress-bar>
         <md-card-header>
@@ -24,22 +24,92 @@
 </template>
 
 <script>
-import checkboxquestion from "../components/checkboxquestion.vue";
+import CheckboxQuestion from "../components/checkboxquestion.vue";
 export default {
   name: "questionnaire",
-  created() {
-    if (this.isConnected()) {
-      this.$router.push("login");
-    } else {
-      this.M_snakbarMessage = "Bienvenu " + this.$user.nom + " " +this.$user.prenom  ;
-      this.M_showSnackbar = true;
+  computed: {
+    percentresponce() {
+      const percentresponce =
+        (this.questionnaire.currentQuestion * 100) /
+        this.questionnaire.questions.length;
+            
+      //console.log("percentresponce", percentresponce);
+      return percentresponce;
+    },
+    questionnaire: {
+      get() {
+        return this.$store.getters.getQuestionnaire(0);
+      },
+      set(value) {
+        this.$store.commit("updateQuestionnaire", value);
+      }
+    },
+    user: {
+      get() {
+        return this.$store.getters.getUser;
+      },
+      set(value) {
+        this.$store.commit("updateUser", value);
+      }
     }
   },
+  methods: {
+    endSurvey(){
+
+    },
+    nbuserSurveyQuestion() {
+      return this.questionnaire.questions.length;
+    },
+    curQuestionPosition() {
+      return this.questionnaire.currentQuestion + 1;
+    },
+    nextQuestion: function() {
+      this.$store.commit("updateCurrQuestion", 1);
+    },
+    precQuestion: function() {
+      //change la question courante pour la suivante
+      if (!this.isFirstQuestion()) {
+        this.$store.commit("updateCurrQuestion", -1);
+      }
+    },
+    isFirstQuestion() {
+      // retourne un booleen pour savoir si c'est la première question du questionnaire courant
+      if (this.curQuestionPosition() - 1 === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    isLastQuestion() {
+      const nbQuestion = this.nbuserSurveyQuestion();
+      const curquestion = this.curQuestionPosition();
+      // retourne un booleen pour savoir si c'est la dernière question du questionnaire courant
+
+      if (nbQuestion === curquestion) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
+  created() {},
   components: {
-    checkboxquestion
+    CheckboxQuestion
   }
 };
 </script>
 
 <style lang="scss">
+.center__elem {
+  padding-top: 50px;
+  margin: 0 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.md-card {
+  width: 700px;
+  padding: 20px;
+}
 </style>
