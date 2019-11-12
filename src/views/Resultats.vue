@@ -3,10 +3,7 @@
     <div class="center__elem">
       <h1>Vos résultats</h1>
       <div class="md-subhead">Total questions: {{questionnaire.questions.length}}</div>
-      <md-card
-        v-for="curQuestion in questionnaire.questions"
-        v-bind:key="curQuestion.idQuestion"
-      >
+      <md-card v-for="curQuestion in questionnaire.questions" v-bind:key="curQuestion.idQuestion">
         <md-card-actions>
           <md-icon v-if="isQuestionRight(curQuestion)">check_circle</md-icon>
         </md-card-actions>
@@ -21,8 +18,6 @@
 // Vue Compossant servant a afficher les résultats d'un questionnaire
 
 import checkboxquestion from "../components/checkboxquestion.vue";
-import router from "../router";
-
 
 // db.changes().on("change", function() {
 //   console.log("Ch-Ch-Changes");
@@ -35,7 +30,7 @@ export default {
     questionnaire: {
       get() {
         return this.$store.getters.getQuestionnaire(0);
-      },
+      }
     }
   },
 
@@ -51,42 +46,19 @@ export default {
 
       console.log("question", curQuestion);
       let nbGoodQuestion = 0;
-      for (let index = 0; index != curQuestion.trueAnswer.length; index++) {
-        for (let index2 = 0; index2 != curQuestion.answer.length; index2++) {
-          console.log("index", index);
-          console.log("index2", index2);
-
-          console.log("curQuestion.answer[index2]", curQuestion.answer[index2]);
-          console.log(
-            "curQuestion.trueAnswer[index]",
-            curQuestion.trueAnswer[index]
+      for (let index = 0; index != curQuestion.choices.length; index++) {
+        let isTrue = curQuestion.trueAnswer.some(currentTrue => {
+          console.log("id egaux",curQuestion.choices[index].idChoice == currentTrue.idChoice)
+          console.log("valeurs egaux",curQuestion.choices[index].value == currentTrue.value)
+          return (
+            curQuestion.choices[index].idChoice == currentTrue.idChoice &&
+            curQuestion.choices[index].value == currentTrue.value
           );
-
-          console.log(
-            "condition 1",
-            curQuestion.answer[index2].idChoice ===
-              curQuestion.trueAnswer[index].idChoice
-          );
-          if (
-            curQuestion.answer[index2].idChoice ===
-            curQuestion.trueAnswer[index].idChoice
-          ) {
-            nbGoodQuestion++;
-          }
-        }
-      }
-      console.log(
-        "Bien répondu ?",
-        nbGoodQuestion === curQuestion.trueAnswer.length
-      );
-      if (nbGoodQuestion === curQuestion.trueAnswer.length) {
-        return true;
-      } else {
-        return false;
+        });
+        console.log("value find ", isTrue);
       }
     }
-  },
-  computed: {}
+  }
 };
 </script>
 

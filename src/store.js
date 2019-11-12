@@ -12,7 +12,7 @@ export default new Vuex.Store({
         globalMessage: {
             M_showSnackbar: false,
             M_mdDuration: 1500,
-            M_style:"background-color: #bd4747;",
+            M_style: "background-color: #bd4747;",
             M_message: ""
         },
         questionnaires: [
@@ -31,19 +31,24 @@ export default new Vuex.Store({
                             {
                                 idChoice: 1,
                                 label: "oui",
-                                value: "false"
+                                value: false
                             },
                             {
                                 idChoice: 2,
                                 label: "non",
-                                value: "false"
+                                value: false
                             }
                         ],
                         trueAnswer: [
                             {
+                                idChoice: 1,
+                                label: "oui",
+                                value: true
+                            },
+                            {
                                 idChoice: 2,
                                 label: "non",
-                                value: "true"
+                                value: false
                             }
                         ]
                     },
@@ -56,19 +61,24 @@ export default new Vuex.Store({
                             {
                                 idChoice: 1,
                                 label: "oui",
-                                value: "false"
+                                value: false
                             },
                             {
                                 idChoice: 2,
                                 label: "non",
-                                value: "false"
+                                value: false
                             }
                         ],
                         trueAnswer: [
                             {
-                                idChoice: 2,
+                                idChoice: 1,
                                 label: "oui",
-                                value: "true"
+                                value: false
+                            },
+                            {
+                                idChoice: 2,
+                                label: "non",
+                                value: true
                             }
                         ]
                     },
@@ -87,13 +97,13 @@ export default new Vuex.Store({
             state.questionnaires = questionnaire
         },
         updateCurrQuestion(state, operation) {
-            console.log("opération", operation)
             state.questionnaires[0].currentQuestion += operation
-            console.log("state.questionnaires[0].currentQuestion",state.questionnaires[0].currentQuestion)
         },
     },
     getters: {
-        getQuestionnaire: state =>(questionnaireIndex)=> {
+        getQuestionnaire: state => (questionnaireIndex) => {
+            //console.log("getQuestionnaire",state.questionnaires[questionnaireIndex]);
+
             return state.questionnaires[questionnaireIndex]
         },
         getUser: state => {
@@ -105,11 +115,11 @@ export default new Vuex.Store({
     },
     actions: {
         verifierInscription(context, payload) {
-            console.log("context", context)
-            console.log("route", payload.route)
-            console.log("message", payload.message)
+            // console.log("context", context)
+            // console.log("route", payload.route)
+            // console.log("message", payload.message)
             const user = context.getters.getUser
-            console.log(user)
+            //console.log(user)
             if (
                 user.prenom != "" &&
                 user.nom != "" &&
@@ -118,16 +128,15 @@ export default new Vuex.Store({
                 context.commit('updateSnackBar', {
                     M_showSnackbar: true,
                     M_mdDuration: 1500,
-                    M_style:"background-color: rgb(71, 165, 72);",
+                    M_style: "background-color: rgb(71, 165, 72);",
                     M_message: "Connecté"
                 })
-                console.log("utilisateur connecté")
                 router.push(payload.route)
             } else {
                 context.commit('updateSnackBar', {
                     M_showSnackbar: true,
                     M_mdDuration: 1500,
-                    M_style:"background-color: #bd4747;",
+                    M_style: "background-color: #bd4747;",
                     M_message: payload.message
                 })
                 return false;

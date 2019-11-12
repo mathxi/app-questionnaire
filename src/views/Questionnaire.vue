@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     endSurvey(){
-
+      this.$router.push('resultats')
     },
     nbuserSurveyQuestion() {
       return this.questionnaire.questions.length;
