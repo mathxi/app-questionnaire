@@ -24,21 +24,42 @@
         <md-button class="md-raised md-primary" @click="verifierInscription() ">Commencer le test</md-button>
       </md-card-actions>
     </md-card>
+    <AdminButton></AdminButton>
   </div>
 </template>
 
 <script>
+import questionnaires from "@/assets/questionnaires.js";
+import AdminButton from "@/components/AdminButton.vue";
 export default {
   name: "login",
   created() {
+    var questionnaire = questionnaires.questionnaires[0];
+    /**
+     * Shuffle algo
+     * par Durstenfeld
+     */
+    for (var i = questionnaire.questions.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = questionnaire.questions[i];
+      questionnaire.questions[i] = questionnaire.questions[j];
+      questionnaire.questions[j] = temp;
+    }
+    questionnaire.questions = questionnaire.questions.slice(0, 3);
+    this.$store.commit("updateQuestionnaire", questionnaire);
   },
   methods: {
-    verifierInscription() {
-      const routeErreur = {
-        route: "questionnaire",
-        message: "Champs non remplis"
-      };
-      this.$store.dispatch('verifierInscription',routeErreur);
+    async verifierInscription() {
+      if (await this.$store.dispatch("isConnected")) {
+        this.$router.push("questionnaire");
+      } else {
+        this.$store.commit("updateSnackBar", {
+          M_showSnackbar: true,
+          M_mdDuration: 1500,
+          M_style: "background-color: #bd4747;",
+          M_message: "Champs non remplis"
+        });
+      }
     }
   },
   computed: {
@@ -51,7 +72,9 @@ export default {
       }
     }
   },
-  components: {},
+  components: {
+    AdminButton
+  },
   data() {
     return {};
   }

@@ -14,8 +14,8 @@
         ></CheckboxQuestion>
 
         <md-card-actions>
-          <md-button v-if="!isLastQuestion()" v-on:click="nextQuestion">Suivant</md-button>
           <md-button v-if="!isFirstQuestion()" v-on:click="precQuestion">Précédent</md-button>
+          <md-button v-if="!isLastQuestion()" v-on:click="nextQuestion">Suivant</md-button>
           <md-button v-if="isLastQuestion()" v-on:click="endSurvey">Terminer</md-button>
         </md-card-actions>
       </md-card>
@@ -25,6 +25,7 @@
 
 <script>
 import CheckboxQuestion from "../components/checkboxquestion.vue";
+import PouchDB from "pouchdb";
 export default {
   name: "questionnaire",
   computed: {
@@ -32,13 +33,13 @@ export default {
       const percentresponce =
         (this.questionnaire.currentQuestion * 100) /
         this.questionnaire.questions.length;
-            
+
       //console.log("percentresponce", percentresponce);
       return percentresponce;
     },
     questionnaire: {
       get() {
-        return this.$store.getters.getQuestionnaire(0);
+        return this.$store.getters.getQuestionnaire();
       },
       set(value) {
         this.$store.commit("updateQuestionnaire", value);
@@ -54,8 +55,18 @@ export default {
     }
   },
   methods: {
-    endSurvey(){
-      this.$router.push('resultats')
+    endSurvey() {
+      var db = new PouchDB("app-questionnaire");
+      const _id =
+        this.user.nom +
+        this.user.prenom +
+        this.user.entreprise +
+        this.questionnaire.idQuestionnaire;
+
+      var answer = Object.assign({}, this.questionnaire, this.user);
+      answer["_id"] = _id;
+      db.put(answer);
+      this.$router.push({ path: 'resultats', query: { id_questionnaire:  _id} })
     },
     nbuserSurveyQuestion() {
       return this.questionnaire.questions.length;
@@ -111,5 +122,6 @@ export default {
 .md-card {
   width: 700px;
   padding: 20px;
+  max-width: 100%;
 }
 </style>

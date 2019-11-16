@@ -2,15 +2,18 @@
   <div class="resultats">
     <div class="center__elem">
       <h1>Vos résultats</h1>
-      <div class="md-subhead">Total questions:{{nbGoodQuestions}} / {{questionnaire.questions.length}}</div>
+      <div
+        class="md-subhead"
+      >Total questions:{{nbGoodQuestions}} / {{questionnaire.questions.length}}</div>
       <md-card v-for="curQuestion in questionnaire.questions" v-bind:key="curQuestion.idQuestion">
         <md-card-actions>
           <md-icon class="trueValue" v-if="isQuestionRight(curQuestion)">check_circle</md-icon>
           <md-icon class="falseValue" v-else>clear</md-icon>
         </md-card-actions>
-        <CheckboxQuestion v-bind:disable="true" :question="curQuestion"></CheckboxQuestion>
+        <checkboxquestion v-bind:disable="true" :question="curQuestion"></checkboxquestion>
       </md-card>
     </div>
+    <AdminButton></AdminButton>
   </div>
 </template>
 
@@ -18,15 +21,24 @@
 <script>
 // Vue Compossant servant a afficher les résultats d'un questionnaire
 
-import checkboxquestion from "../components/checkboxquestion.vue";
-
-// db.changes().on("change", function() {
-//   console.log("Ch-Ch-Changes");
-// });
+import checkboxquestion from "@/components/checkboxquestion.vue";
+import AdminButton from "@/components/AdminButton.vue";
+import PouchDB from "pouchdb";
 
 export default {
   name: "resultats",
-  mounted() {},
+  mounted() {
+    //console.log("route",this.$router.app.$route.query.id_questionnaire)
+    var db = new PouchDB("app-questionnaire");
+    db.get(this.$router.app.$route.query.id_questionnaire)
+      .then(doc => {
+        console.log("doc", doc);
+        this.questionnaire = doc
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
   computed: {
     nbGoodQuestions() {
       var nbGood = 0;
@@ -37,46 +49,44 @@ export default {
       });
       return nbGood;
     },
-    questionnaire: {
+    user: {
       get() {
-        return this.$store.getters.getQuestionnaire(0);
+        return this.$store.getters.getUser;
       }
     }
   },
 
   data() {
-    return {};
+    return {
+      questionnaire: {
+        idQuestionnaire: 0,
+        label: "",
+        currentQuestion: 0,
+        questions: [],
+        prenom: "",
+        nom: "",
+        entreprise: ""
+      }
+    };
   },
   components: {
-    CheckboxQuestion: checkboxquestion
+    checkboxquestion,
+    AdminButton
   },
   methods: {
     isQuestionRight(curQuestion) {
       //les methodes find / map ect.. ne marchais pas
 
-      console.log("question", curQuestion);
       let nbGoodAnswer = 0;
-      console.log("----------NOUVELLE QUESTION----------------");
 
       for (let index = 0; index != curQuestion.choices.length; index++) {
-        console.log("_________nouveau choix__________");
         let isTrue = curQuestion.trueAnswer.some(currentTrue => {
-          console.log(
-            "id egaux",
-            curQuestion.choices[index].idChoice == currentTrue.idChoice
-          );
-          console.log(
-            "valeurs egaux",
-            curQuestion.choices[index].value == currentTrue.value
-          );
-          console.log("valeur choix= ", curQuestion.choices[index].value);
-          console.log("valeur correct= ", currentTrue.value);
           return (
             curQuestion.choices[index].idChoice == currentTrue.idChoice &&
             curQuestion.choices[index].value == currentTrue.value
           );
         });
-        console.log("value find ", isTrue);
+
         if (isTrue) {
           nbGoodAnswer++;
         }
@@ -101,6 +111,7 @@ export default {
 .md-card {
   width: 700px;
   padding: 20px;
+  max-width: 100%;
 }
 
 .md-checkbox {

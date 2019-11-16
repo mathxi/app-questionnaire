@@ -1,13 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import router from './router'
+
 Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
+        admin: {
+            id: "svpdonnez",
+            password: "$2a$10$CTXYEAB16CSKKB43yVlno.K5qAUBUyiHm6/vAf2DCUFq2MLqznwVO",//moiun20
+            connected:false
+        },
         user: {
-            prenom: "valeur",
-            nom: "default",
-            entreprise: "something"
+            prenom: "",
+            nom: "",
+            entreprise: ""
         },
         globalMessage: {
             M_showSnackbar: false,
@@ -15,78 +21,30 @@ export default new Vuex.Store({
             M_style: "background-color: #bd4747;",
             M_message: ""
         },
-        questionnaires: [
-            {
-                idQuestionnaire: 1,
-                label: "Tests de sécurité",
-                currentQuestion: 0,
-                questions: [
-                    //Liste des question pour ce questionnaire
-                    {
-                        idQuestion: 1,
-                        type: "checkbox",
-                        label: "Est-tu beau?",
-                        choices: [
-                            //les choix pour cette question
-                            {
-                                idChoice: 1,
-                                label: "oui",
-                                value: false
-                            },
-                            {
-                                idChoice: 2,
-                                label: "non",
-                                value: false
-                            }
-                        ],
-                        trueAnswer: [
-                            {
-                                idChoice: 1,
-                                label: "oui",
-                                value: true
-                            },
-                            {
-                                idChoice: 2,
-                                label: "non",
-                                value: false
-                            }
-                        ]
-                    },
-                    {
-                        idQuestion: 2,
-                        type: "checkbox",
-                        label: "Tu m'aimes?",
-                        choices: [
-                            //les choix pour cette question
-                            {
-                                idChoice: 1,
-                                label: "oui",
-                                value: false
-                            },
-                            {
-                                idChoice: 2,
-                                label: "non",
-                                value: false
-                            }
-                        ],
-                        trueAnswer: [
-                            {
-                                idChoice: 1,
-                                label: "oui",
-                                value: false
-                            },
-                            {
-                                idChoice: 2,
-                                label: "non",
-                                value: true
-                            }
-                        ]
-                    },
-                ]
-            }
-        ]
+        questionnaire: {
+            idQuestionnaire: 0,
+            label: "",
+            currentQuestion: 0,
+            questions: [
+                //Liste des question pour ce questionnaire
+                {
+                    idQuestion: 0,
+                    type: "",
+                    label: "",
+                    choices: [
+
+                    ],
+                    trueAnswer: [
+
+                    ],
+                },
+            ]
+        }
     },
     mutations: {
+        updateAdmin(state, admin) {
+            state.admin = admin
+        },
         updateSnackBar(state, snackBar) {
             state.globalMessage = snackBar
         },
@@ -94,53 +52,41 @@ export default new Vuex.Store({
             state.user = user
         },
         updateQuestionnaire(state, questionnaire) {
-            state.questionnaires = questionnaire
+            state.questionnaire = questionnaire
         },
         updateCurrQuestion(state, operation) {
-            state.questionnaires[0].currentQuestion += operation
+            state.questionnaire.currentQuestion += operation
         },
     },
     getters: {
-        getQuestionnaire: state => (questionnaireIndex) => {
+        getQuestionnaire: state => () => {
             //console.log("getQuestionnaire",state.questionnaires[questionnaireIndex]);
-
-            return state.questionnaires[questionnaireIndex]
+            return state.questionnaire
         },
         getUser: state => {
             return state.user
+        },
+        getAdmin: state => {
+            return state.admin
         },
         getSnackBar: state => {
             return state.globalMessage
         }
     },
     actions: {
-        verifierInscription(context, payload) {
-            // console.log("context", context)
-            // console.log("route", payload.route)
-            // console.log("message", payload.message)
+        isConnected(context) {
             const user = context.getters.getUser
+            console.log("hello user", user)
             //console.log(user)
-            if (
-                user.prenom != "" &&
+            if (user.prenom != "" &&
                 user.nom != "" &&
-                user.entreprise != ""
-            ) {
-                context.commit('updateSnackBar', {
-                    M_showSnackbar: true,
-                    M_mdDuration: 1500,
-                    M_style: "background-color: rgb(71, 165, 72);",
-                    M_message: "Connecté"
-                })
-                router.push(payload.route)
+                user.entreprise != "") {
+                console.log("true")
+                return true
             } else {
-                context.commit('updateSnackBar', {
-                    M_showSnackbar: true,
-                    M_mdDuration: 1500,
-                    M_style: "background-color: #bd4747;",
-                    M_message: payload.message
-                })
-                return false;
+                return false
             }
-        }
+
+        },
     }
 })
