@@ -37,6 +37,14 @@ export default {
       //console.log("percentresponce", percentresponce);
       return percentresponce;
     },
+    snackBar: {
+      get() {
+        return this.$store.getters.getSnackBar;
+      },
+      set(value) {
+        this.$store.commit("updateUser", value);
+      }
+    },
     questionnaire: {
       get() {
         return this.$store.getters.getQuestionnaire();
@@ -66,7 +74,16 @@ export default {
       var answer = Object.assign({}, this.questionnaire, this.user);
       answer["_id"] = _id;
       db.put(answer);
-      this.$router.push({ path: 'resultats', query: { id_questionnaire:  _id} })
+      this.snackBar.M_showSnackbar = true;
+      this.snackBar.M_style = "background-color: #58b368;";
+      this.snackBar.M_message = "Réponses enregistré";
+      setTimeout(oui => {
+        this.snackBar.M_showSnackbar = false;
+      }, 1000);
+      this.$router.push({
+        path: "resultats",
+        query: { id_questionnaire: _id }
+      });
     },
     nbuserSurveyQuestion() {
       return this.questionnaire.questions.length;

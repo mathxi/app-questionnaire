@@ -36,12 +36,10 @@
         <md-field>
           <label>Identifiant</label>
           <md-input v-model="inputID"></md-input>
-          <span class="md-error">{{errormsg}}</span>
         </md-field>
         <md-field>
           <label>Mot de passe</label>
           <md-input type="password" v-model="inputPassword"></md-input>
-          <span class="md-error">{{errormsg}}</span>
         </md-field>
         <md-button @click="TryConnection" class="md-raised md-accent">Connexion</md-button>
       </md-card-content>
@@ -68,7 +66,7 @@ export default {
       result.rows.forEach(row => {
         this.answers.push(row.doc);
       });
-      console.log("this.answers", this.answers);
+
     });
   },
   methods: {
@@ -85,31 +83,36 @@ export default {
         if (bcrypt.compareSync(this.inputPassword, this.admin.password)) {
           this.$store.commit("updateSnackBar", {
             M_showSnackbar: true,
-            M_mdDuration: 1500,
             M_style: "background-color: #58b368;",
             M_message: "Connecté"
           });
+          setTimeout(oui => {
+            this.snackBar.M_showSnackbar = false;
+          }, 1000);
           this.admin.connected = true;
         } else {
           this.$store.commit("updateSnackBar", {
             M_showSnackbar: true,
-            M_mdDuration: 1500,
             M_style: "background-color: #bd4747;",
             M_message: "Mot de passe non valide"
           });
+          setTimeout(oui => {
+            this.snackBar.M_showSnackbar = false;
+          }, 1000);
         }
       } else {
         this.$store.commit("updateSnackBar", {
           M_showSnackbar: true,
-          M_mdDuration: 1500,
           M_style: "background-color: #bd4747;",
           M_message: "Identifiant non valide"
         });
+        setTimeout(oui => {
+          this.snackBar.M_showSnackbar = false;
+        }, 1000);
       }
     },
     nbGoodQuestions(questionnaire) {
       var nbGood = 0;
-      console.log("questionnaire", questionnaire);
       questionnaire.questions.forEach(question => {
         if (this.isQuestionRight(question)) {
           nbGood++;
@@ -148,6 +151,14 @@ export default {
       },
       set(admin) {
         this.$store.commit("updateAdmin", admin);
+      }
+    },
+    snackBar: {
+      get() {
+        return this.$store.getters.getSnackBar;
+      },
+      set(value) {
+        this.$store.commit("updateUser", value);
       }
     }
   },
