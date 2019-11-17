@@ -13,14 +13,15 @@
       :md-active.sync="snackBar.M_showSnackbar"
     >
       <span>{{snackBar.M_message}}</span>
-      <!-- <md-button class="md-primary" @click="snackBar.M_showSnackbar = false">Cacher</md-button> -->
+      <md-button @click="snackBar.M_showSnackbar = false">Ok!</md-button>
     </md-snackbar>
-
+    <AdminButton></AdminButton>
   </div>
 </template> 
 
 <script lang="ts">
 import loader from "./components/Loader.vue";
+import AdminButton from "@/components/AdminButton.vue";
 export default {
   name: "appBase",
   data() {
@@ -28,19 +29,20 @@ export default {
       logged: false
     };
   },
+  methods: {},
   async created() {
     this.logged = false;
     if (this.$router.app.$route.name != "login") {
       if (await this.$store.dispatch("isConnected")) {
         this.logged = true;
       } else {
-        this.$store.commit("updateSnackBar", {
-          M_showSnackbar: true,
-          M_mdDuration: 1500,
-          M_style: "background-color: #bd4747;",
-          M_message: "Non connecté"
-        });
+        this.snackBar.M_showSnackbar = true;
+        this.snackBar.M_style = "background-color: #bd4747;";
+        this.snackBar.M_message = "Non connecté";
         this.$router.replace("/");
+        setTimeout(oui => {
+          this.snackBar.M_showSnackbar = false;
+        }, 1000);
       }
     } else {
       this.logged = true;
@@ -50,12 +52,16 @@ export default {
     snackBar: {
       get() {
         return this.$store.getters.getSnackBar;
+      },
+      set(value) {
+        this.$store.commit("updateUser", value);
       }
     }
   },
   mounted() {},
   components: {
-    loader
+    loader,
+    AdminButton
   }
 };
 </script>

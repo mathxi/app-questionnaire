@@ -24,13 +24,12 @@
         <md-button class="md-raised md-primary" @click="verifierInscription() ">Commencer le test</md-button>
       </md-card-actions>
     </md-card>
-    <AdminButton></AdminButton>
   </div>
 </template>
 
 <script>
 import questionnaires from "@/assets/questionnaires.js";
-import AdminButton from "@/components/AdminButton.vue";
+
 export default {
   name: "login",
   created() {
@@ -55,10 +54,12 @@ export default {
       } else {
         this.$store.commit("updateSnackBar", {
           M_showSnackbar: true,
-          M_mdDuration: 1500,
           M_style: "background-color: #bd4747;",
           M_message: "Champs non remplis"
         });
+        setTimeout(oui => {
+          this.snackBar.M_showSnackbar = false;
+        }, 1000);
       }
     }
   },
@@ -70,11 +71,17 @@ export default {
       set(value) {
         this.$store.commit("updateUser", value);
       }
+    },
+    snackBar: {
+      get() {
+        return this.$store.getters.getSnackBar;
+      },
+      set(value) {
+        this.$store.commit("updateUser", value);
+      }
     }
   },
-  components: {
-    AdminButton
-  },
+  components: {},
   data() {
     return {};
   }
@@ -82,6 +89,9 @@ export default {
 </script>
 
 <style lang="scss">
+h1 {
+  line-height: 1.2em;
+}
 .card__login {
   width: 500px;
 }
