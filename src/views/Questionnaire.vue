@@ -6,7 +6,7 @@
         <md-progress-bar class="md-accent" md-mode="determinate" :md-value="percentresponce"></md-progress-bar>
         <md-card-header>
           <div class="md-title">{{questionnaire.label}}</div>
-          <div class="md-subhead">Total questions: {{questionnaire.questions.length}}</div>
+          <div class="md-subhead">Question: {{questionnaire.currentQuestion +1}} / {{questionnaire.questions.length}}</div>
         </md-card-header>
         <CheckboxQuestion
           v-bind:disable="false"
@@ -129,12 +129,12 @@ export default {
 
 <style lang="scss">
 .center__elem {
-  padding-top: 50px;
   margin: 0 10%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding: 50px 0;
 }
 .md-card {
   width: 700px;

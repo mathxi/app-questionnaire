@@ -80,6 +80,7 @@ export default {
 
 @import "~vue-material/dist/theme/all"; // Apply the themeyle>
 
+
 .container__loader {
   display: flex;
   justify-content: center;

@@ -1,7 +1,12 @@
 <template>
   <div class="resultats">
     <div class="center__elem">
-      <h1>Vos résultats</h1>
+      <h1>
+        Résultats de {{user.nom}} {{user.prenom}}
+        <i
+          style="font-weight:100; font-size:0.8em;"
+        >({{user.entreprise}})</i>
+      </h1>
       <div
         class="md-subhead"
       >Total questions:{{nbGoodQuestions}} / {{questionnaire.questions.length}}</div>
@@ -11,6 +16,7 @@
           <md-icon class="falseValue" v-else>clear</md-icon>
         </md-card-actions>
         <checkboxquestion v-bind:disable="true" :question="curQuestion"></checkboxquestion>
+        <Collapsible :question="curQuestion"></Collapsible>
       </md-card>
     </div>
     <AdminButton></AdminButton>
@@ -22,6 +28,7 @@
 // Vue Compossant servant a afficher les résultats d'un questionnaire
 
 import checkboxquestion from "@/components/checkboxquestion.vue";
+import Collapsible from "@/components/Collapsible.vue";
 import AdminButton from "@/components/AdminButton.vue";
 import PouchDB from "pouchdb";
 
@@ -33,7 +40,7 @@ export default {
     db.get(this.$router.app.$route.query.id_questionnaire)
       .then(doc => {
         console.log("doc", doc);
-        this.questionnaire = doc
+        this.questionnaire = doc;
       })
       .catch(err => {
         console.log(err);
@@ -71,7 +78,8 @@ export default {
   },
   components: {
     checkboxquestion,
-    AdminButton
+    AdminButton,
+    Collapsible
   },
   methods: {
     isQuestionRight(curQuestion) {

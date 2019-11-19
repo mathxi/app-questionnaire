@@ -37,6 +37,7 @@ export default {
     /**
      * Shuffle algo
      * par Durstenfeld
+     * pour rendre aléatoire les questions du questionnaire
      */
     for (var i = questionnaire.questions.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
@@ -44,7 +45,7 @@ export default {
       questionnaire.questions[i] = questionnaire.questions[j];
       questionnaire.questions[j] = temp;
     }
-    questionnaire.questions = questionnaire.questions.slice(0, 3);
+    questionnaire.questions = questionnaire.questions.slice(0, 10);
     this.$store.commit("updateQuestionnaire", questionnaire);
   },
   methods: {
