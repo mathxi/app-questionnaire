@@ -34,7 +34,8 @@ export default {
                             label: "non",
                             value: false
                         }
-                    ]
+                    ],
+                    solution: "La question doit ce poser ?"
                 },
                 {
                     idQuestion: 2,
@@ -314,7 +315,7 @@ export default {
                             label: "Je préviens le patron",
                             value: false
                         },
-                        { 
+                        {
                             idChoice: 4,
                             label: "Ça passera demain ils ont prévu moins de pluie",
                             value: false
@@ -336,7 +337,7 @@ export default {
                             label: "Je préviens le patron 🧙‍",
                             value: true
                         },
-                        { 
+                        {
                             idChoice: 4,
                             label: "Ça passera demain ils ont prévu moins de pluie 💦",
                             value: false
@@ -417,6 +418,407 @@ export default {
                     solution: "Il y a quelques temps quand l'on tapais cette question dans google il nous répondait 42. Celà est du au fait que 42 est la réponse a beaucoup de choses en mathématique / physique."
                 },
             ]
-        }
+        },
+        {
+            idQuestionnaire: 2,
+            label: "Situation d'urgence",
+            currentQuestion: 0,
+            questions: [
+                //Liste des question pour ce questionnaire
+                {
+                    idQuestion: 1,
+                    type: "checkbox",
+                    label: "Notre entreprise dispose d'un defrebrillateur, où se situe-t-il ?",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "Toilettes 🚽",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Couloir principal",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Cafétéria ☕",
+                            value: false
+                        }
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "Toilettes 🚽",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Couloir principal",
+                            value: true
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Cafétéria ☕",
+                            value: false
+                        }
+                    ],
+                    solution: "Il est important de savoir où ce situe ce genre de dispositifs médial car en cas d'arrêt cardiaque, sois une mort subite d'un individu, il faut agir le plus vite possible, en pratiquant les gestes qui sauvent ( massage, defébrillation ). Ainsi le cœur peut repartir évitant ainsi de lourdes séquelles, voire la mort."
+                },
+                {
+                    idQuestion: 2,
+                    type: "checkbox",
+                    label: "Où se situe les sorties de secours ?",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "Escalier",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Bureau de Jeff Bezos",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Open Space",
+                            value: false
+                        }
+                    ],
+                    trueAnswer: [// les réponses attendu
+                        {
+                            idChoice: 1,
+                            label: "Escalier",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Bureau de Jeff Bezos",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Open Space",
+                            value: true
+                        }
+                    ],
+                    solution: "En cas d'incendie ou autre situation d'urgence il est important de connaître où se situe les sorties de secours pour la sécurité de tous."
+                },
+                {
+                    idQuestion: 3,
+                    type: "checkbox",
+                    label: "J'ai eu un accident avec la voiture de service",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "J'appel mon supérieur",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "J'appel les secours",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "J'appel ma maman",
+                            value: false
+                        }
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "J'appel mon supérieur",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "J'appel les secours",
+                            value: true
+                        },
+                        {
+                            idChoice: 3,
+                            label: "J'appel ma maman",
+                            value: false
+                        }
+                    ],
+                    solution: "En cas d'accident il est important de connaître les premiers geste pour la protection de tous"
+                },
+                {
+                    idQuestion: 4,
+                    type: "checkbox",
+                    label: "Le détecteur de fumée présente un faux contact et fait que sonner",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "Je l'enlève définitivement",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "J'appel un spécialiste",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Je change de bureau",
+                            value: false
+                        },
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "Je l'enlève définitivement",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "J'appel un spécialiste",
+                            value: true
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Je change de bureau",
+                            value: true
+                        },
+                    ],
+                    solution: "un détecteur de fumée est très important pour prévenir un feu ainsi, réduire au maximum les dégâts humains comme matériels"
+                },
+                {
+                    idQuestion: 5,
+                    type: "checkbox",
+                    label: "Un collègue fait un malaise au seins de l'entreprise, que devez-vous faire?",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "Appelez un collègue compétant",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Contacter les pompiers",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Le mettre en PLS",
+                            value: false
+                        },
+                        {
+                            idChoice: 4,
+                            label: "Le bouger",
+                            value: false
+                        },
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "Appelez un collègue compétant",
+                            value: true
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Contacter les pompiers",
+                            value: true
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Le mettre en PLS",
+                            value: true
+                        },
+                        {
+                            idChoice: 4,
+                            label: "Le bouger",
+                            value: false
+                        },
+                    ],
+                    solution: "Les premiers gestes de secours sont importants pour minimiser les séquelles."
+                },
+                {
+                    idQuestion: 6,
+                    type: "checkbox",
+                    label: "Il n'y a plus internet sur mon ordinateur et ceux de mes collègues. Je:",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "rentre chez moi",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "contact le support",
+                            value: false
+                        },
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "rentre chez moi",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "contact le support",
+                            value: true
+                        },
+                    ],
+                    solution: "De nos jours internet est très important dans les entreprises une solution doit être vite trouvé car le temps c'est de l'argent."
+
+                },
+                {
+                    idQuestion: 7,
+                    type: "checkbox",
+                    label: "Une coupure de courant intervient:",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "Je fais une petite sieste ",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Je le relais à mon supérieur ",
+                            value: false
+                        },
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "Je fais une petite sieste ",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Je le relais à mon supérieur ",
+                            value: true
+                        },
+                    ],
+                    solution: "Les résponsables doivent être au courant des situations problèmatique afin de les régler."
+                },
+                {
+                    idQuestion: 8,
+                    type: "checkbox",
+                    label: "Une voiture bloque l'accès au parking de mon entreprise.",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "J'appelle la fourrière",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Je lui casse le pare-brise",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Je cherche le propriétaire",
+                            value: false
+                        },
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "J'appelle la fourrière",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Je lui casse le pare-brise",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "Je cherche le propriétaire",
+                            value: false
+                        },
+                    ],
+                    solution: "Le matériel est important il faut donc le protéger avant tout puis prévenir mon supérieur."
+                },
+                {
+                    idQuestion: 9,
+                    type: "checkbox",
+                    label: "Cette question est:",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "Vrais 😈",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Fausse 👿",
+                            value: false
+                        },
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "Vrais",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "Fausse",
+                            value: false
+                        },
+                    ],
+                    solution: "La vie n'est pas noir ou blanche, c'est un mélange de haut et de bas, il faut donc savoir tempérer.🤣✌"
+                },
+                {
+                    idQuestion: 10,
+                    type: "checkbox",
+                    label: "Quel est le sens de la vie?",
+                    choices: [
+                        //les choix pour cette question
+                        {
+                            idChoice: 1,
+                            label: "0",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "1",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "42",
+                            value: false
+                        },
+                    ],
+                    trueAnswer: [
+                        {
+                            idChoice: 1,
+                            label: "0",
+                            value: false
+                        },
+                        {
+                            idChoice: 2,
+                            label: "1",
+                            value: false
+                        },
+                        {
+                            idChoice: 3,
+                            label: "42",
+                            value: false
+                        },
+                    ],
+                    solution: "Il y a quelques temps quand l'on tapais cette question dans google il nous répondait 42. Celà est du au fait que 42 est la réponse a beaucoup de choses en mathématique / physique."
+                },
+            ]
+        },
+
+
     ]
 }

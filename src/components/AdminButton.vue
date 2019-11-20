@@ -8,6 +8,12 @@
       </md-speed-dial-target>
 
       <md-speed-dial-content>
+        <md-button to="/" class="md-fab md-primary">
+          <md-icon>home</md-icon>
+        </md-button>
+        <md-button v-if="admin.connected" to="/admin" class="md-fab md-primary">
+          <md-icon>security</md-icon>
+        </md-button>
         <md-button
           v-if="admin.connected"
           @click="disconnectAdmin"
@@ -18,10 +24,6 @@
         </md-button>
         <md-button v-else to="/admin" class="md-fab md-primary">
           <md-icon>toggle_off</md-icon>
-        </md-button>
-
-        <md-button to="/" class="md-fab md-primary">
-          <md-icon>home</md-icon>
         </md-button>
       </md-speed-dial-content>
     </md-speed-dial>
@@ -38,7 +40,7 @@ export default {
         M_style: "background-color: #bd4747;",
         M_message: "Déconnecté"
       });
-      setTimeout( oui => {
+      setTimeout(oui => {
         this.snackBar.M_showSnackbar = false;
       }, 1000);
     }
