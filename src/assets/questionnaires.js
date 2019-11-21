@@ -2,7 +2,7 @@ export default {
     questionnaires: [
         {
             idQuestionnaire: 1,
-            label: "Situation dangereuse",
+            label: "Situations dangereuses",
             currentQuestion: 0,
             questions: [
                 //Liste des question pour ce questionnaire
@@ -35,7 +35,7 @@ export default {
                             value: false
                         }
                     ],
-                    solution: "La question doit ce poser ?"
+                    solution: "Devons nous nous poser cette question ?"
                 },
                 {
                     idQuestion: 2,
@@ -117,7 +117,7 @@ export default {
                             value: false
                         }
                     ],
-                    solution: "Je suis compétant dans le domaine que je pratique et j'utilise donc avec intélligence les outils fournis"
+                    solution: "Je suis compétant dans le domaine que je pratique et j'utilise donc avec intelligence les outils fournis"
                 },
                 {
                     idQuestion: 4,
@@ -158,12 +158,12 @@ export default {
                             value: true
                         },
                     ],
-                    solution: "Il est important lorsque lorsque l'on travail sur des points critique pour l'entreprise d'être attentif à ce que l'on fait. De plus il est important de demander à ses collègues usages et les coutumes."
+                    solution: "Il est important lorsque l'on travail sur des points critiques de l'entreprise, d'être attentif à ce que l'on fait. De plus il est important de demander les bons usages et coutumes."
                 },
                 {
                     idQuestion: 5,
                     type: "checkbox",
-                    label: "Les gants me protèges de tout dommages",
+                    label: "Les gants me protègent de tout dommages",
                     choices: [
                         //les choix pour cette question
                         {
@@ -189,7 +189,7 @@ export default {
                             value: true
                         },
                     ],
-                    solution: "Malgré qu'ils soient très utile les gants ne sont pas omnipotent."
+                    solution: "Bien qu'ils soient très utiles ils ne sont pas omnipotents"
                 },
                 {
                     idQuestion: 6,
@@ -240,7 +240,7 @@ export default {
                             value: true
                         },
                     ],
-                    solution: "Si je suis le dernier à quitter l'établissement il m'incombe de m'assurer que la sécurité du bâtiment est en bon et du forme. L'alarme doit être activé, les portes fermé et certaine lumière allumé pour simuler de la présence."
+                    solution: "Si je suis le dernier à quitter l'établissement il m'incombe de m'assurer que la sécurité du bâtiment est en bonne et due forme. L'alarme doit être activée, les portes fermées et certaines lumières allumées Pour simuler une présence."
 
                 },
                 {
@@ -292,7 +292,7 @@ export default {
                             value: true
                         },
                     ],
-                    solution: "Oui l'entreprise dispose d'une rauquette électronique ultra-puissante pour tuer tout les moustiques et autres mais les araignées sont importantes au sein de la nature, arrêtons de les tuer et sauvons notre planète. 🌿"
+                    solution: "Oui l'entreprise dispose d'une raquette électrique ultra-puissante pour tuer tout les moustiques et autres mais les araignées sont importantes au sein de la nature, arrêtons de les tuer et sauvons notre planète. 🌿"
                 },
                 {
                     idQuestion: 8,
@@ -415,13 +415,13 @@ export default {
                             value: false
                         },
                     ],
-                    solution: "Il y a quelques temps quand l'on tapais cette question dans google il nous répondait 42. Celà est du au fait que 42 est la réponse a beaucoup de choses en mathématique / physique."
+                    solution: "Auparavant lorsque nous recherchions cette question sur Google la réponse était : 42, du fait de ses nombreux liens mathématiques et physiques."
                 },
             ]
         },
         {
             idQuestionnaire: 2,
-            label: "Situation d'urgence",
+            label: "Situations d'urgences",
             currentQuestion: 0,
             questions: [
                 //Liste des question pour ce questionnaire
@@ -752,7 +752,7 @@ export default {
                         //les choix pour cette question
                         {
                             idChoice: 1,
-                            label: "Vrais 😈",
+                            label: "Vraie 😈",
                             value: false
                         },
                         {
@@ -764,7 +764,7 @@ export default {
                     trueAnswer: [
                         {
                             idChoice: 1,
-                            label: "Vrais",
+                            label: "Vraie",
                             value: false
                         },
                         {

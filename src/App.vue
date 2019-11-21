@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import loader from "./components/Loader.vue";
-import AdminButton from "@/components/AdminButton.vue";
+import AdminButton from "./components/AdminButton.vue";
 export default {
   name: "appBase",
   data() {

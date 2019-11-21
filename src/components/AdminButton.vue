@@ -66,5 +66,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scopped>
+.md-top-left {
+  top: 10px !important;
+}
 </style>

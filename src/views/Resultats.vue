@@ -2,7 +2,7 @@
   <div class="resultats">
     <div class="center__elem">
       <h1>
-        Résultats de {{user.nom}} {{user.prenom}}
+        Résultat de {{user.nom}} {{user.prenom}}
         <i
           style="font-weight:100; font-size:0.8em;"
         >({{user.entreprise}})</i>
@@ -126,7 +126,7 @@ export default {
   display: flex;
 }
 .center__elem {
-  padding-top: 50px;
+  padding: 70px 0;
   margin: 0 10%;
   display: flex;
   align-items: center;
