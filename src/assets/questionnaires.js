@@ -353,7 +353,7 @@ export default {
                         //les choix pour cette question
                         {
                             idChoice: 1,
-                            label: "Vrais 😈",
+                            label: "Vraie 😈",
                             value: false
                         },
                         {
@@ -365,7 +365,7 @@ export default {
                     trueAnswer: [
                         {
                             idChoice: 1,
-                            label: "Vrais",
+                            label: "Vraie",
                             value: false
                         },
                         {
@@ -412,7 +412,7 @@ export default {
                         {
                             idChoice: 3,
                             label: "42",
-                            value: false
+                            value: true
                         },
                     ],
                     solution: "Auparavant lorsque nous recherchions cette question sur Google la réponse était : 42, du fait de ses nombreux liens mathématiques et physiques."
